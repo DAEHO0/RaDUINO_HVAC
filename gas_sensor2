@@ -1,0 +1,48 @@
+// MQ135 센서의 아날로그 출력 AO 핀을 아두이노 A0 핀에 연결
+const int MQ135_PIN = A0;
+
+void setup() {
+  Serial.begin(9600);  // 시리얼 통신 시작 9600은 통신 속도(baud rate)를 의미함 시리얼 모니터도 9600으로 맞춰야 정상 출력됨
+}
+
+void loop() {
+  int sensorValue = analogRead(MQ135_PIN);  // MQ135 센서의 아날로그 값을 읽음 
+                                            // analogRead()는 0~1023 사이의 값을 반환함 
+                                            // 0에 가까울수록 전압이 낮고, 1023에 가까울수록 전압이 높음
+
+  float voltage = sensorValue * (5.0 / 1023.0);  // 아두이노 Uno 기준 아날로그 입력값을 전압으로 변환 
+                                                 // 아두이노 Uno의 ADC는 0~5V를 0~1023 값으로 변환함 
+                                                 // 예: sensorValue가 512이면 약 2.5V
+
+
+  Serial.print("MQ135 Raw: ");    // 시리얼 모니터에 "MQ135 Raw: " 문구 출력
+                                  // Serial.print()는 줄바꿈 없이 출력함
+
+  Serial.print(sensorValue);   // MQ135에서 읽은 원시 아날로그 값을 출력
+
+  Serial.print(", Voltage: ");
+
+  Serial.print(voltage);    // 계산된 전압값 출력
+
+  Serial.print(" V");   // 전압 단위 V 출력
+
+  Serial.print(", Air Quality Level: ");    // 공기질 상태를 출력하기 위한 문구 출력
+
+  // 센서값이 300보다 작으면 공기질이 좋다고 판단
+  if (sensorValue < 300) {
+    // println()은 출력 후 줄바꿈함
+    Serial.println("Good");
+
+  // 센서값이 300 이상 600 미만이면 보통 상태로 판단
+  } else if (sensorValue < 600) {
+    Serial.println("Normal");
+
+  // 센서값이 600 이상이면 공기질이 나쁘다고 판단
+  } else {
+    Serial.println("Bad");
+  }
+
+  // 2000ms = 2초 대기
+  // 너무 빠르게 출력되지 않도록 2초마다 한 번씩 측정
+  delay(2000);
+}
