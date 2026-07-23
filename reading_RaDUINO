@@ -1,0 +1,44 @@
+// 1. install raspberry pi on sd card
+// 2. booting a raspberry pi and connecting to the network
+
+  // how to check the raspberry pi IP on my Mac
+
+  </> Bash
+  ping USERname.local  // ex) ping my-rspb-local.local
+
+  // Stop the ping 'Crtl + c'
+
+
+// 3. checking arduino connection on raspberry pi
+
+  </> Bash
+  ls /dev/ttyACM*
+
+  // it displayed as follows: /dev/ttyACM0
+
+// 4. install pySerial
+
+  </>Bash
+  sudo apt update
+  sudo apt install -y python3-serial
+
+  // check installation
+
+  </>Bash
+  python3 -c "import serial; print(serial.__version__)"
+
+  // it displayed as follows: 3.5
+
+
+// 5. Listing available ports with pySerial
+
+  </> Bash
+  python3 -m serial.tools.list_ports
+
+
+// 6. easy monitoring
+
+  </> Bash
+  python3 -m serial.tools.miniterm /dev/ttyACM0 9600
+
+  // Stop monitoring 'Crtl + ]'
